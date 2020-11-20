@@ -1,10 +1,429 @@
-<Router AppAssembly="@typeof(Program).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p>Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+@inject HttpClient Http
+
+@if (_completedSetup)
+{
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+}
+else
+{
+    <div class="container">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>Abilities</th>
+                    <td>
+                        @if (_abilities)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Evolve</th>
+                    <td>
+                        @if (_evolve)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Evolve</th>
+                    <td>
+                        @if (_expGrid)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Feats</th>
+                    <td>
+                        @if (_feats)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Filter Data</th>
+                    <td>
+                        @if (_filterData)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Gender</th>
+                    <td>
+                        @if (_gender)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Habitat</th>
+                    <td>
+                        @if (_habitat)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Index Order</th>
+                    <td>
+                        @if (_indexOrder)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Items</th>
+                    <td>
+                        @if (_items)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Levels</th>
+                    <td>
+                        @if (_levels)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>TMs</th>
+                    <td>
+                        @if (_tms)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Natures</th>
+                    <td>
+                        @if (_natures)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Pokedex Extra</th>
+                    <td>
+                        @if (_pokedexExtra)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Trainer Classes</th>
+                    <td>
+                        @if (_trainerClasses)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Variant Map</th>
+                    <td>
+                        @if (_variantMap)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Moves</th>
+                    <td>
+                        @if (_moves)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>Pokemon</th>
+                    <td>
+                        @if (_pokemon)
+                        {
+                            <span class="oi oi-check" style="color: green;"></span>
+                        }
+                        else
+                        {
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+}
+
+@code
+{
+    private bool _completedSetup;
+
+    private bool _abilities;
+    private bool _evolve;
+    private bool _expGrid;
+    private bool _feats;
+    private bool _filterData;
+    private bool _gender;
+    private bool _habitat;
+    private bool _indexOrder;
+    private bool _items;
+    private bool _levels;
+    private bool _tms;
+    private bool _natures;
+    private bool _pokedexExtra;
+    private bool _trainerClasses;
+    private bool _variantMap;
+    private bool _moves;
+    private bool _pokemon;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await Task.WhenAll(SetAbilities(), Evolve(), ExpGrid(), Feats(), FilterData(), Gender(), Habitat(), IndexOrder(), Items(), Levels(), TMs(), Natures(), PokedexExtra(), TrainerClasses(), VariantMap(), Moves(), Pokemon());
+        _completedSetup = true;
+    }
+
+    private async Task SetAbilities()
+    {
+        StaticData.Abilities = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, AbilityData>>("DataFiles/abilities.json", StaticData.Options))!;
+        _abilities = true;
+        StateHasChanged();
+    }
+
+    private async Task Evolve()
+    {
+        StaticData.EvolveDictionary = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, EvolveData>>("DataFiles/evolve.json", StaticData.Options))!;
+        _evolve = true;
+        StateHasChanged();
+    }
+
+    private async Task ExpGrid()
+    {
+        StaticData.ExpGrid = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, ExpGridData>>("DataFiles/exp_grid.json", StaticData.Options))!;
+        _expGrid = true;
+        StateHasChanged();
+    }
+
+    private async Task Feats()
+    {
+        StaticData.Feats = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, FeatData>>("DataFiles/feats.json", StaticData.Options))!;
+        _feats = true;
+        StateHasChanged();
+    }
+
+    private async Task FilterData()
+    {
+        StaticData.FilterData = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, FilterData>>("DataFiles/filter_data.json", StaticData.Options))!;
+        _filterData = true;
+        StateHasChanged();
+    }
+
+    private async Task Gender()
+    {
+        StaticData.GenderDictionary = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, int>>("DataFiles/gender.json", StaticData.Options))!;
+        _gender = true;
+        StateHasChanged();
+    }
+
+    private async Task Habitat()
+    {
+        StaticData.Habitat = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, List<string>>>("DataFiles/habitat.json", StaticData.Options))!;
+        _habitat = true;
+        StateHasChanged();
+    }
+
+    private async Task IndexOrder()
+    {
+        StaticData.IndexDictionary = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, List<string>>>("DataFiles/index_order.json", StaticData.Options))!;
+        _indexOrder = true;
+        StateHasChanged();
+    }
+
+    private async Task Items()
+    {
+        StaticData.Items = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, ItemData>>("DataFiles/items.json", StaticData.Options))!;
+        _items = true;
+        StateHasChanged();
+    }
+
+    private async Task Levels()
+    {
+        StaticData.LevelDictionary = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, LevelData>>("DataFiles/leveling.json", StaticData.Options))!;
+        _levels = true;
+        StateHasChanged();
+    }
+
+    // ReSharper disable once InconsistentNaming
+    private async Task TMs()
+    {
+        StaticData.TMs = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, string>>("DataFiles/move_machines.json", StaticData.Options))!;
+        _tms = true;
+        StateHasChanged();
+    }
+
+    private async Task Natures()
+    {
+        StaticData.Natures = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>>>("DataFiles/natures.json", StaticData.Options))!;
+        _natures = true;
+        StateHasChanged();
+    }
+
+    private async Task PokedexExtra()
+    {
+        StaticData.PokedexExtraDictionary = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, PokedexExtraData>>("DataFiles/pokedex_extra.json", StaticData.Options))!;
+        _pokedexExtra = true;
+        StateHasChanged();
+    }
+
+    private async Task TrainerClasses()
+    {
+        StaticData.TrainerClasses = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, List<string>>>("DataFiles/trainer_classes.json", StaticData.Options))!;
+        _trainerClasses = true;
+        StateHasChanged();
+    }
+
+    private async Task VariantMap()
+    {
+        StaticData.Variants = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, List<string>>>("DataFiles/variant_map.json", StaticData.Options))!;
+        _variantMap = true;
+        StateHasChanged();
+    }
+
+    private async Task Moves()
+    {
+        StaticData.Moves = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, MoveData>>("DataFiles/moves.json", StaticData.Options))!;
+        _moves = true;
+        StateHasChanged();
+    }
+
+    private async Task Pokemon()
+    {
+        StaticData.PokemonDictionary = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, PokemonData>>("DataFiles/pokemon.json", StaticData.Options))!;
+        _pokemon = true;
+        StateHasChanged();
+    }
+}

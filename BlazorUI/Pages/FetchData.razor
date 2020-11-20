@@ -52,7 +52,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         _forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-        var response = await Http.GetAsync("DataFiles/abilities.json", HttpCompletionOption.ResponseHeadersRead);
+        var response = await Http.GetAsync("DataFiles/pokemon.json", HttpCompletionOption.ResponseHeadersRead);
         _response = response.StatusCode;
         if (_response == HttpStatusCode.OK)
         {

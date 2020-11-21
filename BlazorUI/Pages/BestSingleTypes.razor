@@ -1,0 +1,106 @@
+﻿@page "/BestSingleTypes"
+
+<h1>'Best' Single Types</h1>
+<div>
+    Compare every type using chart below and add values together
+    <ul>
+        <li>Immunity: 2</li>
+        <li>Resist: 1</li>
+        <li>Normal: 0</li>
+        <li>Super: -1</li>
+    </ul>
+</div>
+
+<div class="row">
+    <table class="table table-striped col-sm-6 table-bordered">
+        <caption>Attack</caption>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in _attackDictionary)
+            {
+                <tr>
+                    <td>@key</td>
+                    <td>@value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table class="table table-striped col-sm-6 table-bordered">
+        <caption>Defense</caption>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in _defenseDictionary)
+            {
+                <tr>
+                    <td>@key</td>
+                    <td>@value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+
+    private readonly Dictionary<PokemonType, int> _attackDictionary = new Dictionary<PokemonType, int>(TypeRepository.GoodTypes.Count);
+    private readonly Dictionary<PokemonType, int> _defenseDictionary = new Dictionary<PokemonType, int>(TypeRepository.GoodTypes.Count);
+
+    private static int GetNumber(float effectiveness)
+    {
+        if (Math.Abs(effectiveness - TypeRepository.Immune) < float.Epsilon)
+        {
+            return 2;
+        }
+
+        if (Math.Abs(effectiveness - TypeRepository.Resist) < float.Epsilon)
+        {
+            return 1;
+        }
+
+        if (Math.Abs(effectiveness - TypeRepository.Super) < float.Epsilon)
+        {
+            return -1;
+        }
+
+        return 0;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        for (var i = 0; i < TypeRepository.GoodTypes.Count; i++)
+        {
+            var total = 0;
+            for (var j = 0; j < TypeRepository.GoodTypes.Count; j++)
+            {
+                var effectiveness = TypeRepository.Effectiveness(TypeRepository.GoodTypes[i], TypeRepository.GoodTypes[j]);
+                total -= GetNumber(effectiveness);
+            }
+
+            _attackDictionary.Add(TypeRepository.GoodTypes[i], total);
+        }
+
+        for (var i = 0; i < TypeRepository.GoodTypes.Count; i++)
+        {
+            var total = 0;
+            for (var j = 0; j < TypeRepository.GoodTypes.Count; j++)
+            {
+                var effectiveness = TypeRepository.Effectiveness(TypeRepository.GoodTypes[j], TypeRepository.GoodTypes[i]);
+                total += GetNumber(effectiveness);
+            }
+
+            _defenseDictionary.Add(TypeRepository.GoodTypes[i], total);
+        }
+    }
+
+}

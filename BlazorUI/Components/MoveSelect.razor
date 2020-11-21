@@ -1,0 +1,32 @@
+﻿<div class="form-group">
+    <label>@Label</label>
+    <select class="form-control" @onchange="OnMoveChanged">
+        <option value="">@StaticData.Select</option>
+        @foreach (var item in StaticData.Moves.Keys)
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Move: ";
+
+    [Parameter]
+    public string? Move { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> MoveChanged { get; set; }
+
+    public Task OnMoveChanged(ChangeEventArgs e)
+    {
+        Move = e.Value?.ToString();
+        if (string.Equals(Move, StaticData.Select))
+        {
+            Move = null;
+        }
+
+        return MoveChanged.InvokeAsync(Move);
+    }
+}

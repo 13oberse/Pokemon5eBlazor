@@ -1,0 +1,149 @@
+﻿@page "/BestDoubleTypes"
+
+<h1>'Best' Double Types</h1>
+<div>
+    Compare every type combination using chart below and add values together
+    <ul>
+        <li>Immunity: 3</li>
+        <li>Double Resist: 2</li>
+        <li>Resist: 1</li>
+        <li>Normal: 0</li>
+        <li>Super: -1</li>
+        <li>Double Super: -2</li>
+    </ul>
+</div>
+
+<div class="row">
+    <table class="table table-striped col-sm-6 table-bordered">
+        <caption>Attack (against all combos)</caption>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in _attackDictionary)
+            {
+                <tr>
+                    <td>@key</td>
+                    <td>@value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table class="table table-striped col-sm-6 table-bordered">
+        <caption>Defense</caption>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th @onclick="ChangeSort">Rating (sortable) <span class="@_sortClass"></span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in _defenseDictionary)
+            {
+                <tr>
+                    <td>@key</td>
+                    <td>@value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+
+    private readonly Dictionary<PokemonType, int> _attackDictionary = new Dictionary<PokemonType, int>(TypeRepository.GoodTypes.Count);
+    private Dictionary<string, int> _defenseDictionary = new Dictionary<string, int>(TypeRepository.GoodTypes.Count);
+    private string _sortClass = "";
+    private bool _descending;
+
+    private void ChangeSort()
+    {
+        _descending = !_descending;
+        if (_descending)
+        {
+            _defenseDictionary = _defenseDictionary.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            _sortClass = "oi oi-sort-descending";
+        }
+        else
+        {
+            _defenseDictionary = _defenseDictionary.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            _sortClass = "oi oi-sort-ascending";
+        }
+    }
+
+    private static int GetNumber(float effectiveness)
+    {
+        if (Math.Abs(effectiveness - TypeRepository.Immune) < float.Epsilon)
+        {
+            return 3;
+        }
+
+        if (Math.Abs(effectiveness - TypeRepository.DoubleResist) < float.Epsilon)
+        {
+            return 2;
+        }
+
+        if (Math.Abs(effectiveness - TypeRepository.Resist) < float.Epsilon)
+        {
+            return 1;
+        }
+
+        if (Math.Abs(effectiveness - TypeRepository.Super) < float.Epsilon)
+        {
+            return -1;
+        }
+
+        if (Math.Abs(effectiveness - TypeRepository.DoubleSuper) < float.Epsilon)
+        {
+            return -2;
+        }
+
+        return 0;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        var listOfTypeCombos = new List<PokemonType[]>();
+        for (var i = 0; i < TypeRepository.GoodTypes.Count; i++)
+        {
+            for (var j = 0; j < TypeRepository.GoodTypes.Count; j++)
+            {
+                listOfTypeCombos.Add(new[] { TypeRepository.GoodTypes[i], TypeRepository.GoodTypes[j] });
+            }
+        }
+
+        foreach (var pokemonType in TypeRepository.GoodTypes)
+        {
+            var total = 0;
+            foreach (var combo in listOfTypeCombos)
+            {
+                var effectiveness = combo[0] == combo[1]
+                    ? TypeRepository.Effectiveness(pokemonType, combo[0])
+                    : TypeRepository.Effectiveness(pokemonType, combo[0], combo[1]);
+                total -= GetNumber(effectiveness);
+            }
+
+            _attackDictionary.Add(pokemonType, total);
+        }
+
+        foreach (var combo in listOfTypeCombos)
+        {
+            var total = 0;
+            foreach (var pokemonType in TypeRepository.GoodTypes)
+            {
+                var effectiveness = combo[0] == combo[1]
+                    ? TypeRepository.Effectiveness(pokemonType, combo[0])
+                    : TypeRepository.Effectiveness(pokemonType, combo[0], combo[1]);
+                total += GetNumber(effectiveness);
+            }
+
+            var typeName = combo[0] == combo[1] ? combo[0].ToString() : $"{combo[0]}/{combo[1]}";
+            _defenseDictionary.Add(typeName, total);
+        }
+    }
+
+}

@@ -6,6 +6,8 @@ namespace BlazorUI.Contracts
 {
     public static class StaticData
     {
+        public static string Select => "- Select -";
+
         public static JsonSerializerOptions Options => new JsonSerializerOptions
         {
             Converters =

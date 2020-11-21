@@ -1,0 +1,49 @@
+﻿<div class="form-group">
+    <fieldset>
+        <legend>@Label</legend>
+        <div class="form-check">
+            <input id="@Name-Null" class="form-check-input" type="radio" name="@Name" @onchange="OnValueChanged" value="" />
+            @* ReSharper disable once Html.IdNotResolved *@
+            <label for="@Name-Null" class="form-check-label">All</label>
+        </div>
+        <div class="form-check">
+            <input id="@Name-True" class="form-check-input" type="radio" name="@Name" @onchange="OnValueChanged" value="true" />
+            @* ReSharper disable once Html.IdNotResolved *@
+            <label for="@Name-True" class="form-check-label">True</label>
+        </div>
+        <div class="form-check">
+            <input id="@Name-False" class="form-check-input" type="radio" name="@Name" @onchange="OnValueChanged" value="false" />
+            @* ReSharper disable once Html.IdNotResolved *@
+            <label for="@Name-False" class="form-check-label">False</label>
+        </div>
+    </fieldset>
+</div>
+
+@code {
+
+    [Parameter]
+    public string Label { get; set; } = "Label";
+
+    [Parameter]
+    public string Name { get; set; } = "RadioBool";
+
+    [Parameter]
+    public bool? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<bool?> ValueChanged { get; set; }
+
+    private Task OnValueChanged(ChangeEventArgs e)
+    {
+        if (e.Value == null || !bool.TryParse(e.Value.ToString(), out var val))
+        {
+            Value = null;
+        }
+        else
+        {
+            Value = val;
+        }
+
+        return ValueChanged.InvokeAsync(Value);
+    }
+}

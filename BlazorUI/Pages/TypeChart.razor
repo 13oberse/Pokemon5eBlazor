@@ -1,0 +1,38 @@
+﻿@page "/TypeChart"
+
+<h1>Type Chart</h1>
+
+<div>Compare with <a href="https://pokemondb.net/type" target="_blank">https://pokemondb.net/type</a></div>
+
+<table class="table table-bordered table-striped table-responsive">
+    <thead>
+        <tr>
+            <th>Attack Below Defense Across</th>
+            @for (var i = 0; i < TypeRepository.GoodTypes.Count; i++)
+            {
+                <th>@TypeRepository.GoodTypes[i]</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < TypeRepository.GoodTypes.Count; i++)
+        {
+            <tr>
+                <td>@TypeRepository.GoodTypes[i]</td>
+                @for (var j = 0; j < TypeRepository.GoodTypes.Count; j++)
+                {
+                    var effectiveness = TypeRepository.Effectiveness(TypeRepository.GoodTypes[i], TypeRepository.GoodTypes[j]);
+                    var color = Math.Abs(effectiveness - TypeRepository.Resist) < float.Epsilon
+                        ? "red"
+                        : Math.Abs(effectiveness - TypeRepository.Super) < float.Epsilon
+                            ? "green"
+                            : Math.Abs(effectiveness - TypeRepository.Immune) < float.Epsilon
+                                ? "grey"
+                                : "white";
+
+                    <td style="background-color: @color;">@effectiveness</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

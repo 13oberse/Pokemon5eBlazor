@@ -1,0 +1,59 @@
+﻿<fieldset>
+    <legend>@Name</legend>
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                Min
+            </div>
+        </div>
+        <input type="number" class="form-control" @onchange="OnPropertyRangeMinChanged" />
+    </div>
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                Max
+            </div>
+        </div>
+        <input type="number" class="form-control" @onchange="OnPropertyRangeMaxChanged" />
+    </div>
+</fieldset>
+
+@code {
+
+    [Parameter]
+    public string Name { get; set; } = "Range: ";
+
+    [Parameter]
+    public PropertyRange<int?> PropertyRange { get; set; } = new PropertyRange<int?>();
+
+    [Parameter]
+    public EventCallback<PropertyRange<int?>> PropertyRangeChanged { get; set; }
+
+    public Task OnPropertyRangeMinChanged(ChangeEventArgs e)
+    {
+        if (e.Value == null)
+        {
+            PropertyRange.Min = null;
+        }
+        else if (int.TryParse(e.Value.ToString(), out var result))
+        {
+            PropertyRange.Min = result;
+        }
+
+        return PropertyRangeChanged.InvokeAsync(PropertyRange);
+    }
+
+    public Task OnPropertyRangeMaxChanged(ChangeEventArgs e)
+    {
+        if (e.Value == null)
+        {
+            PropertyRange.Max = null;
+        }
+        else if (int.TryParse(e.Value.ToString(), out var result))
+        {
+            PropertyRange.Max = result;
+        }
+
+        return PropertyRangeChanged.InvokeAsync(PropertyRange);
+    }
+}

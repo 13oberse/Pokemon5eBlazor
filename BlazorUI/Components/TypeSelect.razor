@@ -1,0 +1,36 @@
+﻿<div class="form-group">
+    <label>@Label</label>
+    <select class="form-control" @onchange="OnTypeChanged">
+        <option value="">@StaticData.Select</option>
+        @foreach (var item in Enum.GetValues<PokemonType>())
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Type";
+
+    [Parameter]
+    public PokemonType? Type { get; set; }
+
+    [Parameter]
+    public EventCallback<PokemonType?> TypeChanged { get; set; }
+
+    private Task OnTypeChanged(ChangeEventArgs e)
+    {
+        var str = e.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(str) || string.Equals(str, StaticData.Select))
+        {
+            Type = null;
+        }
+        else
+        {
+            Type = Enum.Parse<PokemonType>(str);
+        }
+
+        return TypeChanged.InvokeAsync(Type);
+    }
+}

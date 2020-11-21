@@ -112,6 +112,11 @@
         {
             for (var j = 0; j < TypeRepository.GoodTypes.Count; j++)
             {
+                if (listOfTypeCombos.Any(x => x[1] == TypeRepository.GoodTypes[i] && x[0] == TypeRepository.GoodTypes[j]))
+                {
+                    continue;
+                }
+
                 listOfTypeCombos.Add(new[] { TypeRepository.GoodTypes[i], TypeRepository.GoodTypes[j] });
             }
         }

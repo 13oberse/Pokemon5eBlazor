@@ -21,7 +21,7 @@ namespace BlazorUI.Contracts
 
         public static IReadOnlyDictionary<string, EvolveData> EvolveDictionary { get; set; }
 
-        public static IReadOnlyDictionary<string, ExpGridData> ExpGrid { get; set; }
+        public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>> ExpGrid { get; set; }
 
         public static IReadOnlyDictionary<string, FeatData> Feats { get; set; }
 

@@ -1,0 +1,33 @@
+﻿@page "/Natures"
+
+<h1>Natures</h1>
+
+<div class="row">
+    <table class="table table-bordered table-striped table-responsive">
+        <caption>Results</caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Attribute 1</th>
+                <th>Attribute 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in StaticData.Natures)
+            {
+                <tr>
+                    <td>@key</td>
+                    @foreach (var item in value)
+                    {
+                        <td>@item.Key: @item.Value</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private string? _name = null;
+    private string? _effect = null;
+}

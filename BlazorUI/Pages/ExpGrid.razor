@@ -1,0 +1,30 @@
+﻿@page "/ExpGrid"
+
+<h1>Experience Grid</h1>
+
+<div class="row">
+    <table class="table table-bordered table-striped table-responsive">
+        <caption>Results</caption>
+        <thead>
+            <tr>
+                <th>Level</th>
+                @foreach (var item in StaticData.ExpGrid["1"])
+                {
+                    <th>SR: @item.Key</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in StaticData.ExpGrid)
+            {
+                <tr>
+                    <td>@key</td>
+                    @foreach (var item in value)
+                    {
+                        <td>@item.Value</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

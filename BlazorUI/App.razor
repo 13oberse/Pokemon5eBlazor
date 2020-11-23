@@ -323,7 +323,7 @@ else
 
     private async Task ExpGrid()
     {
-        StaticData.ExpGrid = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, ExpGridData>>("DataFiles/exp_grid.json", StaticData.Options))!;
+        StaticData.ExpGrid = (await Http.GetFromJsonAsync<IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>>>("DataFiles/exp_grid.json", StaticData.Options))!;
         _expGrid = true;
         StateHasChanged();
     }

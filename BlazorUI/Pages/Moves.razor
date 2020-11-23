@@ -1,0 +1,92 @@
+﻿@page "/Moves"
+
+<h1>Moves</h1>
+
+<div class="row">
+    <div class="card">
+        <div class="card-header">
+            Parameters
+        </div>
+        <div class="card-body">
+            <fieldset class="form-group">
+                <legend class="col-form-label">Name</legend>
+                <input class="form-control" type="text" @bind="_name" />
+            </fieldset>
+            <fieldset class="form-group">
+                <legend class="col-form-label">Effect</legend>
+                <input class="form-control" type="text" @bind="_effect" />
+            </fieldset>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <table class="table table-bordered table-striped table-responsive">
+        <caption>Results</caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Move Power</th>
+                <th>Move Time</th>
+                <th>PP</th>
+                <th>Duration</th>
+                <th>Range</th>
+                <th>Is Attack Roll</th>
+                <th>Save</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in MoveRepository.GetMoves())
+            {
+                <tr>
+                    <td>@key</td>
+                    <td>@value.Type</td>
+                    <td>
+                        @if (value.MovePower != null)
+                        {
+                            <span>@string.Join("/", value.MovePower)</span>
+                        }
+                        else
+                        {
+                            <span>None</span>
+                        }
+                    </td>
+                    <td>@value.MoveTime</td>
+                    <td>
+                        @if (value.PowerPoints == -1)
+                        {
+                            <span>Unlimited</span>
+                        }
+                        else
+                        {
+                            <span>@value.PowerPoints</span>
+                        }
+                    </td>
+                    <td>@value.Duration</td>
+                    <td>@value.Range</td>
+                    <td>@value.IsAttackRoll</td>
+                    <td>@value.Save</td>
+                    <td>
+                        @value.Description
+                        @if (value.Damage != null)
+                        {
+                            <br /><span>At higher levels</span>
+                            <ul>
+                                @foreach (var item in value.Damage)
+                                {
+                                    <li>Level @item.Key: @string.Concat(item.Value.Amount, "d", item.Value.DiceMax) Move: @item.Value.Move</li>
+                                }
+                            </ul>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private string? _name = null;
+    private string? _effect = null;
+}

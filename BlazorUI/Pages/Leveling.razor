@@ -1,0 +1,35 @@
+﻿@page "/Leveling"
+
+<h1>Leveling</h1>
+
+<div class="row">
+    <table class="table table-bordered table-striped table-responsive">
+        <caption>Results</caption>
+        <thead>
+            <tr>
+                <th>Level</th>
+                <th>Proficiency</th>
+                <th>STAB</th>
+                <th>ASI</th>
+                <th>EXP</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in StaticData.LevelDictionary)
+            {
+                <tr>
+                    <td>@key</td>
+                    <td>@value.Proficiency</td>
+                    <td>@value.SameTypeAttackBonus</td>
+                    <td>@value.AbilityScoreImprovements</td>
+                    <td>@value.Experience.ToString("##,###")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private string? _name = null;
+    private string? _effect = null;
+}

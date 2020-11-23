@@ -1,0 +1,67 @@
+﻿@page "/Abilities"
+@using System.Text
+
+<h1>Abilities</h1>
+<p>Click on a row to reveal pokemon with that ability</p>
+
+<div class="row">
+    <div class="card">
+        <div class="card-header">
+            Parameters
+        </div>
+        <div class="card-body">
+            <fieldset class="form-group">
+                <legend class="col-form-label">Name</legend>
+                <input class="form-control" type="text" @bind="_name" />
+            </fieldset>
+            <fieldset class="form-group">
+                <legend class="col-form-label">Description</legend>
+                <input class="form-control" type="text" @bind="_description" />
+            </fieldset>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <table class="table table-bordered table-striped table-responsive">
+        <caption>Results</caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (key, value) in AbilityRepository.GetAbilities(_name, _description))
+            {
+                _toggles.TryAdd(key, false);
+                <tr style="cursor: pointer;" @onclick="() => _toggles[key] = !_toggles[key]">
+                    <td>@key</td>
+                    <td>
+                        @value.Description
+                        @if (_toggles[key])
+                        {
+                            var any = false;
+                            <ul>
+                                @foreach (var item in AbilityRepository.GetPokemonByAbility(key))
+                                {
+                                    any = true;
+                                    <li>@item.Key</li>
+                                }
+                                @if (!any)
+                                {
+                                    <li>None (why is this here?)</li>
+                                }
+                            </ul>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private string? _name;
+    private string? _description;
+    private Dictionary<string, bool> _toggles = new Dictionary<string, bool>();
+}

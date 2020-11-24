@@ -9,18 +9,18 @@ namespace BlazorUI.Repositories
     {
         public static IEnumerable<KeyValuePair<string, ItemData>> GetItems(string? name, string? effect)
         {
-            var dic = StaticData.Items.AsEnumerable();
+            var query = StaticData.Items.AsEnumerable();
             if (!string.IsNullOrWhiteSpace(name))
             {
-                dic = dic.Where(x => x.Key.Contains(name, StringComparison.CurrentCultureIgnoreCase));
+                query = query.Where(x => x.Key.Contains(name, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!string.IsNullOrWhiteSpace(effect))
             {
-                dic = dic.Where(x => x.Value.Effect.Contains(effect, StringComparison.CurrentCultureIgnoreCase));
+                query = query.Where(x => x.Value.Effect.Contains(effect, StringComparison.CurrentCultureIgnoreCase));
             }
 
-            return dic;
+            return query;
         }
     }
 }

@@ -1,13 +1,13 @@
-﻿<div class="form-group">
-    <label>@Label</label>
+﻿<fieldset class="form-group">
+    <legend class="col-form-label">@Label</legend>
     <select class="form-control" @onchange="OnTypeChanged">
         <option value="">@StaticData.Select</option>
-        @foreach (var item in Enum.GetValues<PokemonType>())
+        @foreach (var item in TypeRepository.GoodTypes)
         {
             <option value="@item">@item</option>
         }
     </select>
-</div>
+</fieldset>
 
 @code {
     [Parameter]

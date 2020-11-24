@@ -1,6 +1,6 @@
 ﻿<div class="form-group">
     <label>@Label</label>
-    <select class="form-control" @onchange="OnPokemonAbilityChanged">
+    <select class="form-control" @onchange="OnPokemonAttributeChanged">
         <option value="">@StaticData.Select</option>
         <option value="STR">Strength</option>
         <option value="DEX">Dexterity</option>
@@ -19,9 +19,9 @@
     public string? PokemonAttribute { get; set; }
 
     [Parameter]
-    public EventCallback<string?> PokemonAbilityChanged { get; set; }
+    public EventCallback<string?> PokemonAttributeChanged { get; set; }
 
-    private Task OnPokemonAbilityChanged(ChangeEventArgs e)
+    private Task OnPokemonAttributeChanged(ChangeEventArgs e)
     {
         PokemonAttribute = e.Value?.ToString();
         if (string.Equals(PokemonAttribute, StaticData.Select))
@@ -29,6 +29,6 @@
             PokemonAttribute = null;
         }
 
-        return PokemonAbilityChanged.InvokeAsync(PokemonAttribute);
+        return PokemonAttributeChanged.InvokeAsync(PokemonAttribute);
     }
 }

@@ -1,92 +1,111 @@
 ﻿@page "/Moves"
 
 <h1>Moves</h1>
+<p>There wil be some delay on some searches</p>
 
 <div class="row">
-    <div class="card">
-        <div class="card-header">
-            Parameters
-        </div>
-        <div class="card-body">
-            <fieldset class="form-group">
-                <legend class="col-form-label">Name</legend>
-                <input class="form-control" type="text" @bind="_name" />
-            </fieldset>
-            <fieldset class="form-group">
-                <legend class="col-form-label">Effect</legend>
-                <input class="form-control" type="text" @bind="_effect" />
-            </fieldset>
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-header">
+                Parameters
+            </div>
+            <div class="card-body">
+                <StringInput Label="Name" @bind-Value="_parameters.Name"></StringInput>
+                <TypeSelect Label="Type" @bind-Type="_parameters.Type"></TypeSelect>
+                <AttributeSelect Label="Move Power" @bind-PokemonAttribute="_parameters.MovePower"></AttributeSelect>
+                <EnumSelect Label="Move Time" @bind-Value="_parameters.MoveTime"></EnumSelect>
+                <PropertyRangeInt Label="PP (-1 for unlimited)" @bind-PropertyRange="_parameters.PPRange"></PropertyRangeInt>
+                <EnumSelect Label="Move Duration" @bind-Value="_parameters.Duration"></EnumSelect>
+                <RadioBool Label="Is Concentration" Name="@nameof(_parameters.IsConcentration)" @bind-Value="_parameters.IsConcentration"></RadioBool>
+                <RadioBool Label="Is Attack Roll" Name="@nameof(_parameters.IsAttackRoll)" @bind-Value="_parameters.IsAttackRoll"></RadioBool>
+                <RadioBool Label="Has Save" Name="@nameof(_parameters.HasSave)" @bind-Value="_parameters.HasSave"></RadioBool>
+                <RadioBool Label="Is TM" Name="@nameof(_parameters.IsTM)" @bind-Value="_parameters.IsTM"></RadioBool>
+                <RadioBool Label="Scales With Level" Name="@nameof(_parameters.ScalesWithLevel)" @bind-Value="_parameters.ScalesWithLevel"></RadioBool>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <table class="table table-bordered table-striped table-responsive">
-        <caption>Results</caption>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Move Power</th>
-                <th>Move Time</th>
-                <th>PP</th>
-                <th>Duration</th>
-                <th>Range</th>
-                <th>Is Attack Roll</th>
-                <th>Save</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var (key, value) in MoveRepository.GetMoves())
-            {
+    <div class="col-md-10">
+        <table class="table table-bordered table-striped table-responsive">
+            <caption>Results</caption>
+            <thead>
                 <tr>
-                    <td>@key</td>
-                    <td>@value.Type</td>
-                    <td>
-                        @if (value.MovePower != null)
-                        {
-                            <span>@string.Join("/", value.MovePower)</span>
-                        }
-                        else
-                        {
-                            <span>None</span>
-                        }
-                    </td>
-                    <td>@value.MoveTime</td>
-                    <td>
-                        @if (value.PowerPoints == -1)
-                        {
-                            <span>Unlimited</span>
-                        }
-                        else
-                        {
-                            <span>@value.PowerPoints</span>
-                        }
-                    </td>
-                    <td>@value.Duration</td>
-                    <td>@value.Range</td>
-                    <td>@value.IsAttackRoll</td>
-                    <td>@value.Save</td>
-                    <td>
-                        @value.Description
-                        @if (value.Damage != null)
-                        {
-                            <br /><span>At higher levels</span>
-                            <ul>
-                                @foreach (var item in value.Damage)
-                                {
-                                    <li>Level @item.Key: @string.Concat(item.Value.Amount, "d", item.Value.DiceMax) Move: @item.Value.Move</li>
-                                }
-                            </ul>
-                        }
-                    </td>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Move Power</th>
+                    <th>Move Time</th>
+                    <th>PP</th>
+                    <th>Duration</th>
+                    <th>Range</th>
+                    <th>Is Attack Roll</th>
+                    <th>Save</th>
+                    <th>TM</th>
+                    <th>Description</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var (key, value) in MoveRepository.GetMoves(_parameters))
+                {
+                    <tr>
+                        <td>@key</td>
+                        <td>@value.Type</td>
+                        <td>
+                            @if (value.MovePower != null)
+                            {
+                                <span>@string.Join("/", value.MovePower)</span>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                        <td>@value.MoveTime</td>
+                        <td>
+                            @if (value.PowerPoints == -1)
+                            {
+                                <span>Unlimited</span>
+                            }
+                            else
+                            {
+                                <span>@value.PowerPoints</span>
+                            }
+                        </td>
+                        <td>@value.Duration</td>
+                        <td>@value.Range</td>
+                        <td>@value.IsAttackRoll</td>
+                        <td>@value.Save</td>
+                        <td>
+                            @{
+                                var tm = StaticData.TMs.SingleOrDefault(x => x.Value == key).Key;
+                            }
+                            @if (!string.IsNullOrWhiteSpace(tm))
+                            {
+                                <span>@tm</span>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                        <td>
+                            @value.Description
+                            @if (value.Damage != null)
+                            {
+                                <br /><span>At higher levels</span>
+                                <ul>
+                                    @foreach (var item in value.Damage)
+                                    {
+                                        <li>Level @item.Key: @string.Concat(item.Value.Amount, "d", item.Value.DiceMax) Move: @item.Value.Move</li>
+                                    }
+                                </ul>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @code {
-    private string? _name = null;
-    private string? _effect = null;
+    private readonly MoveParameters _parameters = new MoveParameters();
 }

@@ -1,0 +1,21 @@
+﻿<fieldset class="form-group">
+    <legend class="col-form-label">@Label</legend>
+    <input class="form-control" type="text" @onchange="OnValueChanged" />
+</fieldset>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Label";
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> ValueChanged { get; set; }
+
+    private Task OnValueChanged(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString();
+        return ValueChanged.InvokeAsync(Value);
+    }
+}

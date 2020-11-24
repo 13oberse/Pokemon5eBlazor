@@ -15,12 +15,18 @@ namespace BlazorUI.Contracts
         public string MoveTime { get; set; }
 #pragma warning restore 8618
 
+        public MoveTime MoveTimeEnum { get; set; }
+
         [JsonPropertyName("PP")]
         public int PowerPoints { get; set; }
 
 #pragma warning disable 8618
         public string Duration { get; set; }
 #pragma warning restore 8618
+
+        public MoveDuration DurationEnum { get; set; }
+
+        public bool IsConcentration { get; set; }
 
 #pragma warning disable 8618
         public string Range { get; set; }

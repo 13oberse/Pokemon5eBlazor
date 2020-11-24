@@ -1,0 +1,123 @@
+﻿@page "/Pokemon"
+
+<h1>Pokemon</h1>
+<p>There wil be some delay on some searches</p>
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-header">
+                Parameters
+            </div>
+            <div class="card-body">
+                <StringInput Label="Name" @bind-Value="_parameters.Name"></StringInput>
+                <TypeSelect Label="Type 1" @bind-Type="_parameters.Type1"></TypeSelect>
+                <TypeSelect Label="Type 2" @bind-Type="_parameters.Type2"></TypeSelect>
+                <PropertyRangeInt Label="Min Field Level" @bind-PropertyRange="_parameters.MinFieldLevel"></PropertyRangeInt>
+                <PropertyRangeInt Label="SR" @bind-PropertyRange="_parameters.SRRange"></PropertyRangeInt>
+                <PropertyRangeInt Label="AC" @bind-PropertyRange="_parameters.ACRange"></PropertyRangeInt>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <table class="table table-bordered table-striped table-responsive">
+            <caption>Results</caption>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Abilities</th>
+                    <th>Attributes</th>
+                    <th>SR</th>
+                    <th>AC</th>
+                    <th>Hit Dice</th>
+                    <th>HP</th>
+                    <th>Walk Speed</th>
+                    <th>Swim Speed</th>
+                    <th>Fly Speed</th>
+                    <th>Climb Speed</th>
+                    <th>Min Field Level</th>
+                    <th>Saves</th>
+                    <th>Skills</th>
+                    <th>Senses</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var (key, value) in PokemonRepository.GetPokemon(_parameters))
+                {
+                    Console.WriteLine(key);
+                    <tr>
+                        <td>@key</td>
+                        <td>@string.Join("/", value.Type)</td>
+                        <td>
+                            @foreach (var item in value.Abilities)
+                            {
+                                <span>@item</span><br />
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(value.HiddenAbility))
+                            {
+                                <span>@value.HiddenAbility (hidden)</span>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var item in value.Attributes)
+                            {
+                                <span>@item.Key:@item.Value</span><br />
+                            }
+                        </td>
+                        <td>@value.SpeciesRating</td>
+                        <td>@value.ArmorClass</td>
+                        <td>@value.HitDice</td>
+                        <td>@value.HP</td>
+                        <td>@value.WalkSpeed</td>
+                        <td>@value.SwimSpeed</td>
+                        <td>@value.FlySpeed</td>
+                        <td>@value.ClimbSpeed</td>
+                        <td>@value.MinimumFieldLevel</td>
+                        <td>
+                            @if (value.SavingThrows != null)
+                            {
+                                <span>@string.Join("/", value.SavingThrows)</span>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                        <td>
+                            @if (value.Skills != null)
+                            {
+                                foreach (var item in value.Skills)
+                                {
+                                    <span>@item</span><br />
+                                }
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                        <td>
+                            @if (value.Senses != null)
+                            {
+                                foreach (var item in value.Senses)
+                                {
+                                    <span>@item</span><br />
+                                }
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private readonly PokemonParameters _parameters = new PokemonParameters();
+}

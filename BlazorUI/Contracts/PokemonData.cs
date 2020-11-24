@@ -54,9 +54,7 @@ namespace BlazorUI.Contracts
         public string? Evolve { get; set; }
 
         [JsonPropertyName("saving_throws")]
-#pragma warning disable 8618
-        public List<string> SavingThrows { get; set; }
-#pragma warning restore 8618
+        public List<string>? SavingThrows { get; set; }
 
         [JsonPropertyName("Skill")]
         public List<string>? Skills { get; set; }

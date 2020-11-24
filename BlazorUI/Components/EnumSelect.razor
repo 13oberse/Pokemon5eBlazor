@@ -1,0 +1,41 @@
+﻿@typeparam T
+
+<fieldset class="form-group">
+    <legend class="col-form-label">@Label</legend>
+    <select class="form-control" @onchange="OnValueChanged">
+        <option value="">@StaticData.Select</option>
+        @foreach (var item in AllValues)
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+</fieldset>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Select";
+
+    private static readonly Type Type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+    private static readonly T[] AllValues = Enum.GetValues(Type).Cast<T>().ToArray();
+
+    [Parameter]
+    public T Value { get; set; }
+
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
+
+    private Task OnValueChanged(ChangeEventArgs e)
+    {
+        var str = e.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(str) || string.Equals(str, StaticData.Select))
+        {
+            Value = default;
+        }
+        else
+        {
+            Value = (T)Enum.Parse(Type, str);
+        }
+
+        return ValueChanged.InvokeAsync(Value);
+    }
+}

@@ -9,18 +9,18 @@ namespace BlazorUI.Repositories
     {
         public static IEnumerable<KeyValuePair<string, AbilityData>> GetAbilities(string? name, string? description)
         {
-            var dic = StaticData.Abilities.AsEnumerable();
+            var query = StaticData.Abilities.AsEnumerable();
             if (!string.IsNullOrWhiteSpace(name))
             {
-                dic = dic.Where(x => x.Key.Contains(name, StringComparison.CurrentCultureIgnoreCase));
+                query = query.Where(x => x.Key.Contains(name, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!string.IsNullOrWhiteSpace(description))
             {
-                dic = dic.Where(x => x.Value.Description.Contains(description, StringComparison.CurrentCultureIgnoreCase));
+                query = query.Where(x => x.Value.Description.Contains(description, StringComparison.CurrentCultureIgnoreCase));
             }
 
-            return dic;
+            return query;
         }
 
         public static IEnumerable<KeyValuePair<string, PokemonData>> GetPokemonByAbility(string ability)

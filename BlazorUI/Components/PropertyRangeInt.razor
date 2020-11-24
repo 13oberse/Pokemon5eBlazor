@@ -1,5 +1,5 @@
-﻿<fieldset>
-    <legend>@Name</legend>
+﻿<fieldset class="form-group">
+    <legend class="col-form-label">@Label</legend>
     <div class="input-group mb-2">
         <div class="input-group-prepend">
             <div class="input-group-text">
@@ -21,7 +21,7 @@
 @code {
 
     [Parameter]
-    public string Name { get; set; } = "Range: ";
+    public string Label { get; set; } = "Range: ";
 
     [Parameter]
     public PropertyRange<int?> PropertyRange { get; set; } = new PropertyRange<int?>();
@@ -31,7 +31,8 @@
 
     public Task OnPropertyRangeMinChanged(ChangeEventArgs e)
     {
-        if (e.Value == null)
+        var val = e.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(val))
         {
             PropertyRange.Min = null;
         }
@@ -40,12 +41,14 @@
             PropertyRange.Min = result;
         }
 
+        Console.WriteLine(e.Value);
         return PropertyRangeChanged.InvokeAsync(PropertyRange);
     }
 
     public Task OnPropertyRangeMaxChanged(ChangeEventArgs e)
     {
-        if (e.Value == null)
+        var val = e.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(val))
         {
             PropertyRange.Max = null;
         }
